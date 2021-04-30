@@ -7,7 +7,7 @@ class Counter extends Component {
     };
 
     renderTags() {
-        if (this.state.tags.length ===0) return <p>There no tags!</p>;
+        if (this.state.tags.length ===0) return <p>There no tag6s!</p>;
 
         return <ul> {this.state.tags.map(tag => <li key={tag}>{ tag }</li>)}  </ul>
 
