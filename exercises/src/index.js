@@ -9,6 +9,7 @@ import Counter from './components/counter';
 ReactDOM.render(
   <React.StrictMode>
     <Counter />
+    <Counter />
   </React.StrictMode>,
   document.getElementById('root')
 );
