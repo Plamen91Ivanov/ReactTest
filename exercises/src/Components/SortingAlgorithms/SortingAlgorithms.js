@@ -13,6 +13,14 @@ export function getBubleSortAnimation(array,times) {
   return {animations,times};
 }
 
+export function getBubleSortAnimation1(array,times) {
+  const animations = [];
+  var t = bubleSort1(array,animations,times);
+  times = t;
+  return {animations,times};
+}
+
+
 export function getSelectionSortAnimation(array,times) {
   const animations = [];
   var t = selectionSort(array,animations,times);
@@ -33,6 +41,37 @@ export function getQuickSortAnimation(array){
 
   return animations;
 }
+
+function bubleSort1(array,animations,times)
+{
+    var isSorted = true;
+    var elementsNumber = array.length-1;
+    var x = array;
+    do{
+      isSorted = false;
+        for (let i = 0; i < elementsNumber; i++) {
+            if (x[i] > x[i+1])
+            {
+              animations.push([[i],true]);
+               var temp = x[i];
+               x[i] = x[i+1];
+               x[i+1] = temp;
+               isSorted = true;
+            }
+            else{
+              animations.push([[i],false]);
+            }
+    }
+    times++;
+    elementsNumber--;
+    
+    if (!isSorted) {
+      console.log(animations)
+      return times;
+    }
+    }while(isSorted);
+}
+
 
 function bubleSort(array,animations,times)
 {
