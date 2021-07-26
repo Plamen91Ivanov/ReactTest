@@ -1,25 +1,31 @@
+import React from 'react';
+import {BrowserRouter as Router, Route , Switch} from 'react-router-dom';
+import SortingVisualizer from './Components/SortingAlgorithms/SortingVisualizer';
+import PathfindingVisualizer from './Components/PathfindingVisualizer/PathfindingVisualizer';
+import Home from './Components/UI/Home';
+import Navbar from './Components/UI/Navbar'
 import './App.css';
-import Test from './components/test'
-import {Components} from 'react'
 
 function App() {
-  state = {
-    count : 0,
-  };
-
-  const expense = [
-    {title: 'car', amound: 10,date: new Date(2021, 5, 10)},
-    {title: 'car1', amound: 20,date: new Date(2021, 5, 12)},
-    {title: 'car2', amound: 30,date: new Date(2021, 5, 10)},
-  ];
-
   return (
+    <Router>
     <div className="App">
-    <Test title={expense[0].title} amound = {expense[0].amound}/>
-    <Test title={expense[1].title}  amound = {expense[1].amound}/>
-  <h1>count:{state.count}</h1>
-    <button onClick={() => {count++}}>Click ME</button>
-    </div>
+    <Navbar/>
+       <div className='content'>
+          <Switch>
+            <Route exact path='/algo-visualizer'>
+                <Home/>
+            </Route>
+            <Route path='/sorting'>
+                <SortingVisualizer/>
+            </Route>
+            <Route path='/pathfinding'>
+                <PathfindingVisualizer/>
+            </Route>
+          </Switch>
+       </div>
+  </div>
+  </Router>
   );
 }
 
