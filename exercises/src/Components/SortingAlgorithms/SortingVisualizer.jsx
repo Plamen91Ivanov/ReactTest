@@ -171,7 +171,8 @@ export default class SortingVisualizer extends React.Component {
      var t = 0;
      var z = 0;
      var fix = 0;
-     console.log(arrAnimation);
+     //todo : fix animations
+     // for-> animaitons.length  !! true false 
       for (let i = 0; i < totalAnimationSteps; i++) {
         const arrayBars = document.getElementsByClassName('array-bar');
         const isColorChange = i % 3 !== 2;
@@ -190,7 +191,6 @@ export default class SortingVisualizer extends React.Component {
           setTimeout(() => {
             var ar = arrAnimation[z];
             if (animations[t][0] == ar[0] && animations[t][1] == true) { 
-              console.log('tuj');
               t++;
             const [barOneIdx,barTwoIdx] = arrAnimation[z];
             const barOneStyle = arrayBars[barOneIdx].style;
