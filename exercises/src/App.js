@@ -10,7 +10,7 @@ function App() {
   const expense = [
     {title: 'car', amound: 10,date: new Date(2021, 5, 10)},
     {title: 'car1', amound: 20,date: new Date(2021, 5, 12)},
-    {title: 'car2', amound: 30,date: new Date(2021, 5, 11)},
+    {title: 'car2', amound: 30,date: new Date(2021, 5, 10)},
   ];
 
   return (
