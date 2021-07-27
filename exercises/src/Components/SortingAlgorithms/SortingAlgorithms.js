@@ -66,7 +66,6 @@ function bubleSort1(array,animations,times)
     elementsNumber--;
     
     if (!isSorted) {
-      console.log(animations)
       return times;
     }
     }while(isSorted);
