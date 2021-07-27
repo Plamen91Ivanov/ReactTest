@@ -52,14 +52,14 @@ function bubleSort1(array,animations,times)
         for (let i = 0; i < elementsNumber; i++) {
             if (x[i] > x[i+1])
             {
-              animations.push([[i],true]);
+              animations.push([[i, i+1],true]);
                var temp = x[i];
                x[i] = x[i+1];
                x[i+1] = temp;
                isSorted = true;
             }
             else{
-              animations.push([[i],false]);
+              animations.push([[i, i+1],false]);
             }
     }
     times++;
