@@ -11,22 +11,50 @@ const START_NODE_COL = 5;
 const FINISH_NODE_ROW = 1;
 const FINISH_NODE_COL = 12;
 
-
 export default class PathfindingVisualizer extends Component {
   constructor() {
     super();
     this.state = {
       grid: [],
       mouseIsPressed: false,
-      value: 30,
+      value: 10,
       speedValue: 110
     };
   }
   
   componentDidMount() {
-    const grid = getInitialGrid();
+  this.setState({value:10});
+  console.log(this.state.value);
+    const grid = this.getInitialGrid();
     this.setState({grid});
   }
+  
+ getInitialGrid() {
+  const grid = [];
+  console.log(this.state.value);
+  for (let row = 0; row < 10; row++) {
+    const currentRow = [];
+    for (let col = 0; col < 10; col++) {
+      currentRow.push(this.createNode(col, row));
+    }
+    grid.push(currentRow);
+  }
+  return grid;
+};
+
+ createNode(col, row) {
+  return {
+    col,
+    row,  
+    isStart: row === START_NODE_ROW && col === START_NODE_COL,
+    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
+    distance: Infinity,
+    isVisited: false,
+    isWall: false,
+    previousNode: null,
+  };
+};
+
 
   handleMouseDown(row, col) {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
@@ -244,31 +272,6 @@ export default class PathfindingVisualizer extends Component {
   }
 }
 
-const getInitialGrid = () => {
-  const grid = [];
-  for (let row = 0; row < 10; row++) {
-    const currentRow = [];
-    for (let col = 0; col < 15; col++) {
-      currentRow.push(createNode(col, row));
-    }
-    grid.push(currentRow);
-  }
-  return grid;
-};
-
-const createNode = (col, row) => {
-  return {
-    col,
-    row,  
-    isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
-    distance: Infinity,
-    isVisited: false,
-    isWall: false,
-    previousNode: null,
-  };
-};
-
 const getNewGridWithWallToggled = (grid, row, col) => {
   const newGrid = grid.slice(); 
   const node = newGrid[row][col];
@@ -282,7 +285,7 @@ const getNewGridWithWallToggled = (grid, row, col) => {
 
 const getNewGrid = (grid) => {
     const newGrid = grid.slice(); 
-    for (let row = 0; row < 10; row++) {
+    for (let row = 0; row < (15); row++) {
         for (let col = 0; col < 15; col++) {
             const newNode = {
                 col,
