@@ -17,24 +17,23 @@ export default class PathfindingVisualizer extends Component {
     this.state = {
       grid: [],
       mouseIsPressed: false,
-      value: 10,
+      value: 15,
       speedValue: 110
     };
   }
   
   componentDidMount() {
-  this.setState({value:10});
   console.log(this.state.value);
     const grid = this.getInitialGrid();
     this.setState({grid});
-  }
+
+  } 
   
  getInitialGrid() {
   const grid = [];
-  console.log(this.state.value);
-  for (let row = 0; row < 10; row++) {
+  for (let row = 0; row < this.state.value; row++) {
     const currentRow = [];
-    for (let col = 0; col < 10; col++) {
+    for (let col = 0; col < this.state.value; col++) {
       currentRow.push(this.createNode(col, row));
     }
     grid.push(currentRow);
@@ -55,6 +54,16 @@ export default class PathfindingVisualizer extends Component {
   };
 };
 
+handleChange = (e) =>{
+  this.setState({value: e.target.value})
+  
+  const grid = this.getInitialGrid();
+  this.setState({grid});
+};
+handleSpeedValueChange = (e) =>{
+  this.setState({speedValue: e.target.value}) 
+  console.log(this.state.speedValue)
+};
 
   handleMouseDown(row, col) {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
@@ -131,15 +140,8 @@ export default class PathfindingVisualizer extends Component {
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodes = AStar(grid,startNode,finishNode);
-        console.log(visitedNodes);
       }
-  handleChange = (e) =>{
-    this.setState({value: e.target.value})
-  };
-  handleSpeedValueChange = (e) =>{
-    this.setState({speedValue: e.target.value}) 
-    console.log(this.state.speedValue)
-  };
+      
       
   disableAllButtons(){
     document.getElementById('changeArrLength').disabled = true;
@@ -206,7 +208,6 @@ export default class PathfindingVisualizer extends Component {
 
   render() {
     const {grid, mouseIsPressed} = this.state;
-
     return (
       <>
       <div className='algo-btn'>
@@ -228,7 +229,7 @@ export default class PathfindingVisualizer extends Component {
         <input id="changeArrLength" className = "sliderArrayLength"
            type="range"
            min={10}
-           max={50}
+           max={30}
            value={this.state.value} 
            onChange={this.handleChange}
              />
@@ -285,7 +286,7 @@ const getNewGridWithWallToggled = (grid, row, col) => {
 
 const getNewGrid = (grid) => {
     const newGrid = grid.slice(); 
-    for (let row = 0; row < (15); row++) {
+    for (let row = 0; row < 15; row++) {
         for (let col = 0; col < 15; col++) {
             const newNode = {
                 col,
