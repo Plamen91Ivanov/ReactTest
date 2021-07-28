@@ -5,19 +5,10 @@ export function getMergeSortAnimations(array) {
   mergeSortHelper(array, 0, array.length - 1, auxiliaryArray, animations);
   return animations;
 }
-
-export function getBubleSortAnimation(array,times) {
+ 
+export function getBubleSortAnimation(array) {
   const animations = [];
-  var t = bubleSort(array,animations,times);
-  times = t;
-  return {animations,times};
-}
-
-export function getBubleSortAnimation1(array,times) {
-  const animations = [];
-  var t = bubleSort1(array,animations,times);
-  times = t;
-  return {animations,times};
+  return bubleSort(array,animations);
 }
 
 
@@ -42,14 +33,14 @@ export function getQuickSortAnimation(array){
   return animations;
 }
 
-function bubleSort1(array,animations,times)
+function bubleSort(array,animations)
 {
     var isSorted = true;
     var elementsNumber = array.length-1;
     var x = array;
     do{
-      isSorted = false;
-        for (let i = 0; i < elementsNumber; i++) {
+       isSorted = false;
+          for (let i = 0; i < elementsNumber; i++) {
             if (x[i] > x[i+1])
             {
               animations.push([[i, i+1],true]);
@@ -61,42 +52,41 @@ function bubleSort1(array,animations,times)
             else{
               animations.push([[i, i+1],false]);
             }
-    }
-    times++;
-    elementsNumber--;
-    
-    if (!isSorted) {
-      return times;
-    }
+          }
+          elementsNumber--;
+          if (!isSorted) {
+            return animations;
+          }
     }while(isSorted);
 }
 
+//old bs
 
-function bubleSort(array,animations,times)
-{
-    var isSorted = true;
-    var elementsNumber = array.length-1;
-    var x = array;
-    do{
-      isSorted = false;
-        for (let i = 0; i < elementsNumber; i++) {
-            if (x[i] > x[i+1])
-            {
-              animations.push([i]);
-               var temp = x[i];
-               x[i] = x[i+1];
-               x[i+1] = temp;
-               isSorted = true;
-            }
-    }
-    times++;
-    elementsNumber--;
-    console.log(elementsNumber)
-    if (!isSorted) {
-      return times;
-    }
-    }while(isSorted);
-}
+// function bubleSort(array,animations,times)
+// {
+//     var isSorted = true;
+//     var elementsNumber = array.length-1;
+//     var x = array;
+//     do{
+//       isSorted = false;
+//         for (let i = 0; i < elementsNumber; i++) {
+//             if (x[i] > x[i+1])
+//             {
+//               animations.push([i]);
+//                var temp = x[i];
+//                x[i] = x[i+1];
+//                x[i+1] = temp;
+//                isSorted = true;
+//             }
+//     }
+//     times++;
+//     elementsNumber--;
+//     console.log(elementsNumber)
+//     if (!isSorted) {
+//       return times;
+//     }
+//     }while(isSorted);
+// }
 
 function mergeSortHelper(
   mainArray,
