@@ -161,11 +161,9 @@ handleSpeedValueChange = (e) =>{
       buttons[index].disabled = false;
       buttons[index].className = "glow-on-hover sm-btn";
     }
-  }
+  } 
 
-
-
-      addResetButton(){
+  addResetButton(){
         let btn = document.createElement('button');
         btn.onclick = () => {
           this.stop()
@@ -173,15 +171,15 @@ handleSpeedValueChange = (e) =>{
         btn.className = "sm-btn resetBtn";
         btn.innerHTML = "RESET"
         document.getElementById('resetBtn').appendChild(btn);
-      }
+}
       
-     removeResetButton(){
+removeResetButton(){
       const buttons = document.getElementsByClassName('glow-on-hover');
      buttons[buttons.length - 1].remove();
-     }
+}
 
       
-    stop(){
+stop(){
     window.location.reload();
     }
     clearBoard(){
@@ -254,14 +252,15 @@ handleSpeedValueChange = (e) =>{
                     <Node
                       key={nodeIdx}
                       col={col}
+                      row={row}
                       isFinish={isFinish}
                       isStart={isStart}
                       isWall={isWall}
                       mouseIsPressed={mouseIsPressed}
                       onMouseDown={(row, col) => this.handleMouseDown(row, col)}
                       onMouseEnter={(row, col) =>  this.handleMouseEnter(row, col)}
-                      onMouseUp={() => this.handleMouseUp()}
-                      row={row}></Node>
+                      onMouseUp={() => this.handleMouseUp()}>
+                      </Node>
                   );
                 })}
               </div>
