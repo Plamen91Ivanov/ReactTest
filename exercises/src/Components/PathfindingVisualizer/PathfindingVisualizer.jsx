@@ -8,8 +8,8 @@ import './PathfindingVisualizer.css';
 
 const START_NODE_ROW = 5;
 const START_NODE_COL = 5;
-const FINISH_NODE_ROW = 1;
-const FINISH_NODE_COL = 12;
+const FINISH_NODE_ROW = 20;
+const FINISH_NODE_COL = 20;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -49,6 +49,11 @@ export default class PathfindingVisualizer extends Component {
     isVisited: false,
     isWall: false,
     previousNode: null,
+    cost: {
+      F: Infinity,
+      G: Infinity,
+      H: Infinity,
+    },
   };
 };
 
@@ -57,6 +62,7 @@ handleChange = (e) =>{
   
   const grid = this.getInitialGrid();
   this.setState({grid});
+  console.log(this.state.value);
 };
 handleSpeedValueChange = (e) =>{
   this.setState({speedValue: e.target.value}) 
@@ -139,10 +145,9 @@ handleSpeedValueChange = (e) =>{
         const {grid} = this.state;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-        //const visitedNodes = astarNew(grid,startNode,finishNode);
-        console.log(grid);
+        const visitedNodes = astarNew(grid,startNode,finishNode);
+        this.animateDijkstra(visitedNodes[0], visitedNodes[1]);
       }
-      
       
   disableAllButtons(){
     document.getElementById('changeArrLength').disabled = true;
@@ -186,11 +191,10 @@ stop(){
 
     clearBoard(){
     const newGrid = getNewGrid(this.state.grid);
-    console.log(newGrid);
     this.setState({grid: newGrid});
     const {grid} = this.state;
-    for (let i = 0; i < 10; i++) {
-        for (let x = 0; x < 15; x++) {
+    for (let i = 0; i < this.state.value - 1; i++) {
+        for (let x = 0; x < this.state.value - 1; x++) {
             document.getElementById(`node-${i}-${x}`).className = 'node';
             if (START_NODE_COL === x && START_NODE_ROW === i) {
                 const startNode = grid[START_NODE_ROW][START_NODE_COL];
