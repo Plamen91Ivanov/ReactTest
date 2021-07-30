@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Node from './Node/Node';
 import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
 import {dfs} from '../algorithms/dfs'
-import {AStar} from '../algorithms/aStar'
+import {astarNew} from '../algorithms/aStarNew'
 
 import './PathfindingVisualizer.css';
 
@@ -22,11 +22,9 @@ export default class PathfindingVisualizer extends Component {
     };
   }
   
-  componentDidMount() {
-  console.log(this.state.value);
+  componentDidMount() { 
     const grid = this.getInitialGrid();
     this.setState({grid});
-
   } 
   
  getInitialGrid() {
@@ -131,6 +129,8 @@ handleSpeedValueChange = (e) =>{
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const visitedNodes = dfs(grid,startNode,finishNode);
+      console.log(grid);
+      console.log(visitedNodes);
       this.addResetButton();
       this.animateDFS(visitedNodes);
     }
@@ -139,7 +139,8 @@ handleSpeedValueChange = (e) =>{
         const {grid} = this.state;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
-        const visitedNodes = AStar(grid,startNode,finishNode);
+        //const visitedNodes = astarNew(grid,startNode,finishNode);
+        console.log(grid);
       }
       
       
@@ -182,6 +183,7 @@ removeResetButton(){
 stop(){
     window.location.reload();
     }
+
     clearBoard(){
     const newGrid = getNewGrid(this.state.grid);
     console.log(newGrid);
