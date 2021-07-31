@@ -18,7 +18,7 @@ export default class PathfindingVisualizer extends Component {
       grid: [],
       mouseIsPressed: false,
       value: 20,
-      speedValue: 110
+      speedValue: 55
     };
   }
   
@@ -64,38 +64,46 @@ handleChange = (e) =>{
   this.setState({grid});
   console.log(this.state.value);
 };
+
 handleSpeedValueChange = (e) =>{
   this.setState({speedValue: e.target.value}) 
-  console.log(this.state.speedValue)
 };
 
 handleMouseDown(row, col) {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({grid: newGrid, mouseIsPressed: true});
-  }
+};
 
 handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({grid: newGrid});
-  }
+};
 
-  handleMouseUp() {
+handleMouseUp() {
     this.setState({mouseIsPressed: false});
-  }
+};
 
 animateDFS(visitedNodes){
+  this.disableAllButtons();
+  this.addResetButton()
     for (let i = 0; i <= visitedNodes.length - 1; i++) {
         setTimeout(() => {
+          if (i === visitedNodes.length - 1) {
+            this.enableAllButtons();
+            this.removeResetButton();
+            this.disableAlgorithmButtons();
+          }
           const node = visitedNodes[i];
           document.getElementById(`node-${node.row}-${node.col}`).className =
             'node node-visited';
         }, this.state.speedValue * i);
       }
-  }
+};
 
 animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
-    this.addResetButton();
+  this.disableAllButtons();
+  this.addResetButton();
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -113,10 +121,12 @@ animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
 
 animateShortestPath(nodesInShortestPathOrder) {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
-      if (i === nodesInShortestPathOrder.length  - 1) {
-        this.removeResetButton();
-      }
       setTimeout(() => {
+        if (i === nodesInShortestPathOrder.length  - 1) {
+          this.enableAllButtons();
+          this.removeResetButton();
+          this.disableAlgorithmButtons();
+        }
         const node = nodesInShortestPathOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
           'node node-shortest-path';
@@ -138,9 +148,6 @@ visualizeDFS() {
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const visitedNodes = dfs(grid,startNode,finishNode);
-      console.log(grid);
-      console.log(visitedNodes);
-      this.addResetButton();
       this.animateDFS(visitedNodes);
   }
 
@@ -153,7 +160,6 @@ visualizeAStar() {
   }
       
   disableAllButtons(){
-    document.getElementById('changeArrLength').disabled = true;
     document.getElementById('changeAnimationSpeed').disabled = true;
     const buttons = document.getElementsByClassName('sm-btn')
      for (let index = 0; index < buttons.length; index++) {
@@ -161,18 +167,30 @@ visualizeAStar() {
         buttons[index].className = "sm-btn disabled";
      }
   }
+  disableAlgorithmButtons(){  
+    const algoButtons = document.getElementsByClassName('algorithm-btn');
+    console.log(algoButtons);
+    for (let index = 0; index < algoButtons.length; index++) {
+        algoButtons[index].disabled = true;
+        algoButtons[index].className = 'sm-btn algorithm-btn algorithm-button-disabled';
+    }
+  }
   
   enableAllButtons(){
-    document.getElementById('changeArrLength').disabled = false;
     document.getElementById('changeAnimationSpeed').disabled = false;
     const buttons = document.getElementsByClassName('sm-btn')
     for (let index = 0; index < buttons.length; index++) {
       buttons[index].disabled = false;
-      buttons[index].className = "glow-on-hover sm-btn";
+      if (index > 3) {
+        buttons[index].className = "glow-on-hover sm-btn algorithm-btn";
+      }
+      else{
+        buttons[index].className = "glow-on-hover sm-btn";
+      }
     }
-  } 
+  }
 
-  addResetButton(){
+addResetButton(){
         let btn = document.createElement('button');
         btn.onclick = () => {
           this.stop()
@@ -193,7 +211,7 @@ stop(){
 clearBoard(){
     const grid = this.getInitialGrid();
     this.setState({grid});
-
+    this.enableAllButtons();
     // const newGrid = getNewGrid(this.state.grid);
     // this.setState({grid: newGrid});
     // const {grid} = this.state;
@@ -218,22 +236,23 @@ clearBoard(){
     const {grid, mouseIsPressed} = this.state;
     return (
       <>
-      <div className='algo-btn'>
-        <button className="glow-on-hover sm-btn" onClick={() => this.visualizeDijkstra()}>
+      <div  className='algo-btn'>
+      <button className="glow-on-hover sm-btn" onClick={() => this.clearBoard()}>
+         Clear Board
+        </button>
+        <button className="glow-on-hover sm-btn algorithm-btn" onClick={() => this.visualizeDijkstra()}>
           Dijkstra's
         </button>
-        <button className="glow-on-hover sm-btn" onClick={() => this.visualizeDFS()}>
+        <button className="glow-on-hover sm-btn algorithm-btn" onClick={() => this.visualizeDFS()}>
           DSF's
         </button>
-        <button className="glow-on-hover sm-btn" onClick={() => this.visualizeAStar()}>
+        <button className="glow-on-hover sm-btn algorithm-btn" onClick={() => this.visualizeAStar()}>
           AStar
-        </button>
-        <button className="glow-on-hover sm-btn" onClick={() => this.clearBoard()}>
-         Clear Board
         </button>
       </div>
       <div id="resetBtn"></div>
       <div className="slider">
+      <h3>Animation speed</h3>
         {/* <input id="changeArrLength" className = "sliderArrayLength"
            type="range"
            min={10}
@@ -244,12 +263,12 @@ clearBoard(){
               <div>{this.state.value}</div> */}
              <input id="changeAnimationSpeed" className="sliderAnimationSpeed"
            type="range"
-           min={20}
-           max={250}
+           min={10}
+           max={100}
            value={this.state.speedValue} 
            onChange={this.handleSpeedValueChange}
              />
-            <div>{this.state.speedValue}</div>
+            <div>{this.state.speedValue}ms</div>
           </div>
       <div id="resetBtn"></div>
         <div className="grid board">
