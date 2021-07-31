@@ -6,10 +6,10 @@ import {astarNew} from '../algorithms/aStarNew'
 
 import './PathfindingVisualizer.css';
 
-const START_NODE_ROW = 5;
-const START_NODE_COL = 5;
-const FINISH_NODE_ROW = 20;
-const FINISH_NODE_COL = 20;
+const START_NODE_ROW = 8;
+const START_NODE_COL = 8;
+const FINISH_NODE_ROW = 15;
+const FINISH_NODE_COL = 15;
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -17,12 +17,12 @@ export default class PathfindingVisualizer extends Component {
     this.state = {
       grid: [],
       mouseIsPressed: false,
-      value: 15,
+      value: 20,
       speedValue: 110
     };
   }
   
-  componentDidMount() { 
+componentDidMount() { 
     const grid = this.getInitialGrid();
     this.setState({grid});
   } 
@@ -69,12 +69,12 @@ handleSpeedValueChange = (e) =>{
   console.log(this.state.speedValue)
 };
 
-  handleMouseDown(row, col) {
+handleMouseDown(row, col) {
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({grid: newGrid, mouseIsPressed: true});
   }
 
-  handleMouseEnter(row, col) {
+handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
     const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
     this.setState({grid: newGrid});
@@ -84,7 +84,7 @@ handleSpeedValueChange = (e) =>{
     this.setState({mouseIsPressed: false});
   }
 
-  animateDFS(visitedNodes){
+animateDFS(visitedNodes){
     for (let i = 0; i <= visitedNodes.length - 1; i++) {
         setTimeout(() => {
           const node = visitedNodes[i];
@@ -94,7 +94,8 @@ handleSpeedValueChange = (e) =>{
       }
   }
 
-  animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+    this.addResetButton();
     for (let i = 0; i <= visitedNodesInOrder.length; i++) {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
@@ -110,8 +111,11 @@ handleSpeedValueChange = (e) =>{
     }
   }
 
-  animateShortestPath(nodesInShortestPathOrder) {
+animateShortestPath(nodesInShortestPathOrder) {
     for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+      if (i === nodesInShortestPathOrder.length  - 1) {
+        this.removeResetButton();
+      }
       setTimeout(() => {
         const node = nodesInShortestPathOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
@@ -120,17 +124,16 @@ handleSpeedValueChange = (e) =>{
     }
   }
 
-  visualizeDijkstra() {
+visualizeDijkstra() {
     const {grid} = this.state;
     const startNode = grid[START_NODE_ROW][START_NODE_COL];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
-    this.addResetButton();
     this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
-  visualizeDFS() {
+visualizeDFS() {
       const {grid} = this.state;
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
@@ -139,15 +142,15 @@ handleSpeedValueChange = (e) =>{
       console.log(visitedNodes);
       this.addResetButton();
       this.animateDFS(visitedNodes);
-    }
+  }
 
-    visualizeAStar() {
+visualizeAStar() {
         const {grid} = this.state;
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodes = astarNew(grid,startNode,finishNode);
         this.animateDijkstra(visitedNodes[0], visitedNodes[1]);
-      }
+  }
       
   disableAllButtons(){
     document.getElementById('changeArrLength').disabled = true;
@@ -177,24 +180,25 @@ handleSpeedValueChange = (e) =>{
         btn.className = "sm-btn resetBtn";
         btn.innerHTML = "RESET"
         document.getElementById('resetBtn').appendChild(btn);
-}
-      
+} 
 removeResetButton(){
       const buttons = document.getElementsByClassName('glow-on-hover');
      buttons[buttons.length - 1].remove();
-}
+} 
 
-      
 stop(){
     window.location.reload();
-    }
+    } 
 
-    clearBoard(){
-    const newGrid = getNewGrid(this.state.grid);
-    this.setState({grid: newGrid});
-    const {grid} = this.state;
-    for (let i = 0; i < this.state.value - 1; i++) {
-        for (let x = 0; x < this.state.value - 1; x++) {
+clearBoard(){
+    const grid = this.getInitialGrid();
+    this.setState({grid});
+
+    // const newGrid = getNewGrid(this.state.grid);
+    // this.setState({grid: newGrid});
+    // const {grid} = this.state;
+    for (let i = 0; i < this.state.value ; i++) {
+        for (let x = 0; x < this.state.value ; x++) {
             document.getElementById(`node-${i}-${x}`).className = 'node';
             if (START_NODE_COL === x && START_NODE_ROW === i) {
                 const startNode = grid[START_NODE_ROW][START_NODE_COL];
@@ -230,14 +234,14 @@ stop(){
       </div>
       <div id="resetBtn"></div>
       <div className="slider">
-        <input id="changeArrLength" className = "sliderArrayLength"
+        {/* <input id="changeArrLength" className = "sliderArrayLength"
            type="range"
            min={10}
            max={30}
            value={this.state.value} 
            onChange={this.handleChange}
              />
-              <div>{this.state.value}</div>
+              <div>{this.state.value}</div> */}
              <input id="changeAnimationSpeed" className="sliderAnimationSpeed"
            type="range"
            min={20}
