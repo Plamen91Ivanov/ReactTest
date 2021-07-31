@@ -18,7 +18,7 @@ export default class PathfindingVisualizer extends Component {
       grid: [],
       mouseIsPressed: false,
       value: 20,
-      speedValue: 55
+      speedValue: 120
     };
   }
   
@@ -67,6 +67,31 @@ handleChange = (e) =>{
 
 handleSpeedValueChange = (e) =>{
   this.setState({speedValue: e.target.value}) 
+  const textElement = document.getElementById('speedText');
+    if (this.state.speedValue > 130 && this.state.speedValue <= 150) {
+      textElement.style.color = '#FFD502'
+    }
+    if (this.state.speedValue > 150 && this.state.speedValue <= 170) {
+      textElement.style.color = '#FFAB02'
+    }
+    if (this.state.speedValue > 170 && this.state.speedValue <= 190) {
+      textElement.style.color = '#FF5A02'
+    }
+    if (this.state.speedValue > 190) {
+      textElement.style.color = '#FF0000'
+    } 
+    if (this.state.speedValue < 110 && this.state.speedValue >= 90) {
+      textElement.style.color = '#D0FF02'
+    }
+    if (this.state.speedValue < 90 && this.state.speedValue >= 70) {
+      textElement.style.color = '#99FF02'
+    }
+    if (this.state.speedValue < 70 && this.state.speedValue >= 50) {
+      textElement.style.color = '#5BFF02'
+    }
+    if (this.state.speedValue < 50 && this.state.speedValue >= 10) {
+      textElement.style.color = '#1BFF00'
+    }
 };
 
 handleMouseDown(row, col) {
@@ -252,7 +277,6 @@ clearBoard(){
       </div>
       <div id="resetBtn"></div>
       <div className="slider">
-      <h3>Animation speed</h3>
         {/* <input id="changeArrLength" className = "sliderArrayLength"
            type="range"
            min={10}
@@ -263,12 +287,12 @@ clearBoard(){
               <div>{this.state.value}</div> */}
              <input id="changeAnimationSpeed" className="sliderAnimationSpeed"
            type="range"
-           min={10}
-           max={100}
+           min={5}
+           max={250}
            value={this.state.speedValue} 
            onChange={this.handleSpeedValueChange}
              />
-            <div>{this.state.speedValue}ms</div>
+            <div id='speedText'>speed {this.state.speedValue}ms</div>
           </div>
       <div id="resetBtn"></div>
         <div className="grid board">
