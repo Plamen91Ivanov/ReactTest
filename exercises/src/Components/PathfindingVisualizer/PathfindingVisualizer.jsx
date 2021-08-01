@@ -15,6 +15,8 @@ export default class PathfindingVisualizer extends Component {
   constructor() {
     super();
     this.state = {
+      startNodeCol: START_NODE_COL,
+      startNodeRow: START_NODE_ROW,
       grid: [],
       mouseIsPressed: false,
       value: 20,
@@ -59,10 +61,8 @@ componentDidMount() {
 
 handleChange = (e) =>{
   this.setState({value: e.target.value})
-  
   const grid = this.getInitialGrid();
   this.setState({grid});
-  console.log(this.state.value);
 };
 
 handleSpeedValueChange = (e) =>{
@@ -95,13 +95,28 @@ handleSpeedValueChange = (e) =>{
 };
 
 handleMouseDown(row, col) {
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
-    this.setState({grid: newGrid, mouseIsPressed: true});
+
+  let newGrid = '';
+
+  if (this.state.startNodeCol == col && this.state.startNodeRow == row) {
+    newGrid = getNewGridWithChangedStart(this.state.grid, row, col);
+  }
+  else {
+    newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+  }
+  
+  this.setState({grid: newGrid, mouseIsPressed: true, startNodeCol: col, startNodeRow: row});
 };
 
 handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
-    const newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    let newGrid = '';
+    if (this.state.startNodeCol == col && this.state.startNodeRow == row) {
+      newGrid = getNewGridWithChangedStart(this.state.grid, row, col);
+    }
+    else {
+      newGrid = getNewGridWithWallToggled(this.state.grid, row, col);
+    }
     this.setState({grid: newGrid});
 };
 
@@ -161,7 +176,7 @@ animateShortestPath(nodesInShortestPathOrder) {
 
 visualizeDijkstra() {
     const {grid} = this.state;
-    const startNode = grid[START_NODE_ROW][START_NODE_COL];
+    const startNode = grid[this.state.startNodeRow][this.state.startNodeCol];
     const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
     const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
     const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
@@ -170,7 +185,7 @@ visualizeDijkstra() {
 
 visualizeDFS() {
       const {grid} = this.state;
-      const startNode = grid[START_NODE_ROW][START_NODE_COL];
+      const startNode = grid[this.state.startNodeRow][this.state.startNodeCol];
       const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const visitedNodes = dfs(grid,startNode,finishNode);
       this.animateDFS(visitedNodes);
@@ -178,7 +193,7 @@ visualizeDFS() {
 
 visualizeAStar() {
         const {grid} = this.state;
-        const startNode = grid[START_NODE_ROW][START_NODE_COL];
+        const startNode = grid[this.state.startNodeRow][this.state.startNodeCol];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodes = astarNew(grid,startNode,finishNode);
         this.animateDijkstra(visitedNodes[0], visitedNodes[1]);
@@ -336,13 +351,35 @@ const getNewGridWithWallToggled = (grid, row, col) => {
   return newGrid;
 };
 
+const getNewGridWithChangedStart = (grid, row, col) => {
+  const newGrid = grid.slice(); 
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isStart: !node.isStart,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
+};
+
+const getNewGridWithChangedStartPoint = (grid, row, col) => {
+  const newGrid = grid.slice(); 
+  const node = newGrid[row][col];
+  const newNode = {
+    ...node,
+    isWall: !node.isWall,
+  };
+  newGrid[row][col] = newNode;
+  return newGrid;
+};
+
 const getNewGrid = (grid) => {
     const newGrid = grid.slice(); 
     for (let row = 0; row < 15; row++) {
         for (let col = 0; col < 15; col++) {
             const newNode = {
                 col,
-                row,  
+                row,
                 isStart: row === START_NODE_ROW && col === START_NODE_COL,
                 isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
                 distance: Infinity,
