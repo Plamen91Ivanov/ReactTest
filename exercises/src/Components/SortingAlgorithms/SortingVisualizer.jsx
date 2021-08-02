@@ -392,7 +392,7 @@ export default class SortingVisualizer extends React.Component {
     return (
       <div className="board-container">
         <div id='buttons' className="algo-btn">
-        <button className="glow-on-hover sm-btn " onClick={() => this.resetArray()}>New Array</button>
+        <button className="glow-on-hover sm-btn " onClick={() => this.resetArray()}>New</button>
         <button className="glow-on-hover sm-btn algorithm-btn" onClick={() => this.bubbleSort()}>Bubble Sort</button>
         <button className="glow-on-hover sm-btn algorithm-btn" onClick={() => this.insertionSort()}>Insertion Sort</button>
         <button className="glow-on-hover sm-btn algorithm-btn" onClick={() => this.mergeSort()}>Merge Sort</button>
